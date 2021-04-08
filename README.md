@@ -53,9 +53,9 @@ sudo tljh-config add-item auth.NativeAuthenticator.admin_users <admin-username>
 sudo tljh-config reload
 ```
 Back on the login page,
-- click `signup`
-- use the `<admin-username>` you chose above + a password, click `create`
-- click `login`, and you should be able to login immediately (without having to be authorized)
+- click on `Signup!`
+- use the `<admin-username>` you chose above + a password, click `Create User`
+- click `Login!`, enter your username and password, and you should have immediate access without having to be authorized.
 
 
 ## Authorizing a non-admin user

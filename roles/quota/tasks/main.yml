@@ -17,7 +17,7 @@
     src: "UUID={{ UUID.stdout }}"
     path: /
     fstype: ext4
-    opts: errors=remount-ro,usrquota,grpquota
+    opts: errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0
     dump: "0"
     passno: "1"
     state: mounted
@@ -28,9 +28,8 @@
   shell: "{{ item }}"
   with_items:
     - mount -o remount /
-    - quotaoff -v /
-    - quotacheck -ugm /
-    - quotaon -v /
+    - quotacheck -cvugm /
+    - quotaon -vug /
 
 - name: Create default quota user
   become: yes

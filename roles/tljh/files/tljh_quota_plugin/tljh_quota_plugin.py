@@ -18,4 +18,8 @@ def tljh_new_user_create(username):
     except:
         quotauser = 'quotauser'
 
-    subprocess.run(['edquota','-p',quotauser,username],check=True, shell=True)
+    try:
+        p = subprocess.run(['edquota','-f','/','-p',quotauser,username], check=True)
+        print(p.stdout)
+    except:
+        print(p.stderr)

@@ -11,19 +11,29 @@
   shell: |
     curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --plugin /opt/tljh_quota_plugin
 
-# - name: Install TLJH
-#   become: yes
-#   shell: |
-#     export TLJH_BOOTSTRAP_DEV=yes
-#     export TLJH_BOOTSTRAP_PIP_SPEC="git+https://github.com/jupyterhub/the-littlest-jupyterhub.git#egg=the-littlest-jupyterhub"
-#     curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 -
+- name: Make directory /etc/systemd/system/jupyterhub.service.d
+  become: yes
+  file:
+    path: /etc/systemd/system/jupyterhub.service.d
+    state: directory
 
-# # This is to ensure that options in /etc/adduser.conf are used when creating new users
-# - name: Add patch to use adduser instead of useradd
-#   become: yes
-#   patch:
-#     src: user.py.patch
-#     dest: "/opt/tljh/hub/src/the-littlest-jupyterhub/tljh/user.py"
+- name: Modify jupyterhub service
+  become: yes
+  copy:
+    dest: /etc/systemd/system/jupyterhub.service.d/override.conf
+    content: |
+      [Service]
+      PrivateTmp=no
+      PrivateDevices=no
+      ProtectKernelTunables=no
+      ProtectKernelModules=no
+
+- name: Reload jupyterhub service
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - systemctl daemon-reload
+    - systemctl restart jupyterhub
 
 - name: Set config options
   become: yes
@@ -58,17 +68,16 @@
   become: yes
   shell: tljh-config reload hub
 
-# - name: Create additional conda environments
-#   become: yes
-#   shell: "{{ item }}"
-#   with_items:
-#   # - "tljh-config add-item auth.NativeAuthenticator.admin_users {{ admin_user }}"
-#     - /opt/tljh/user/bin/conda install -y nb_conda_kernels
-#     - tljh-config reload hub
-#     - /opt/tljh/user/bin/conda create -y -n py37 python=3.7 numpy scipy matplotlib astropy ipykernel
-#     - /opt/tljh/user/bin/conda create -y -n py38 python=3.8 numpy scipy matplotlib astropy ipykernel
-#     - /opt/tljh/user/bin/conda create -y -n py39 python=3.9 numpy scipy matplotlib astropy ipykernel
-#     - tljh-config reload hub
+- name: Create additional conda environments
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - /opt/tljh/user/bin/conda install -y nb_conda_kernels
+    - tljh-config reload hub
+    - /opt/tljh/user/bin/conda create -y -n py37 python=3.7 numpy scipy matplotlib astropy ipykernel
+    - /opt/tljh/user/bin/conda create -y -n py38 python=3.8 numpy scipy matplotlib astropy ipykernel
+    - /opt/tljh/user/bin/conda create -y -n py39 python=3.9 numpy scipy matplotlib astropy ipykernel
+    - tljh-config reload hub
 
 - name: Activate base conda env on login
   lineinfile:

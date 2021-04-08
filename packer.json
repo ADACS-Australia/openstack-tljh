@@ -21,7 +21,7 @@
       "playbook_file": "build.yml",
       "user": "{{user `ssh_user`}}",
       "only": ["TLJH"],
-      "host_alias": "tljh_build"
+      "host_alias": "tljh"
     }
   ]
 }

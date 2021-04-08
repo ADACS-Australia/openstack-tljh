@@ -1,14 +1,17 @@
 ---
 
 - name: Set up Certbot/LetsEncrypt
-  hosts: tljh_build
+  hosts: tljh
   gather_facts: yes
   become: no
-  vars:
-    domain: jupyterhub.ozstar.cloud.edu.au
-    email: dliptai@swin.edu.au
 
   tasks:
+
+    - name: Check mandatory variables are defined
+      assert:
+        that:
+          - domain is defined
+          - email is defined
 
     - name: Stop services
       become: yes

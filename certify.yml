@@ -1,0 +1,68 @@
+---
+
+- name: Set up Certbot/LetsEncrypt
+  hosts: tljh_build
+  gather_facts: yes
+  become: no
+  vars:
+    domain: jupyterhub.ozstar.cloud.edu.au
+    email: dliptai@swin.edu.au
+
+  tasks:
+
+    - name: Stop services
+      become: yes
+      service:
+        name: "{{ item }}"
+        state: stopped
+      with_items:
+        - jupyterhub
+        - traefik
+
+    - name: Register certificate
+      become: yes
+      shell: >
+        certbot certonly -n --standalone --agree-tos
+        --domains {{ domain }}
+        --email {{ email }}
+
+    - name: Start services
+      become: yes
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - traefik
+        - jupyterhub
+
+    - name: enable https for tljh
+      become: yes
+      shell: "{{ item }}"
+      with_items:
+        - "tljh-config set https.enabled true"
+        - "tljh-config set https.letsencrypt.email {{ email }}"
+        - "tljh-config add-item https.letsencrypt.domains {{ domain }}"
+        - "tljh-config reload proxy"
+        - "tljh-config reload hub"
+
+    - name: set renew hooks
+      become: yes
+      copy:
+        dest: /etc/letsencrypt/renewal-hooks/pre/jphub.sh
+        content: |
+          systemctl stop jupyterhub
+          systemctl stop traefik
+        mode: '0755'
+
+    - name: set renew hooks
+      become: yes
+      copy:
+        dest: /etc/letsencrypt/renewal-hooks/post/jphub.sh
+        content: |
+          systemctl start jupyterhub
+          systemctl start traefik
+        mode: '0755'
+
+    - name: test certbot renew
+      become: yes
+      shell: certbot renew --dry-run

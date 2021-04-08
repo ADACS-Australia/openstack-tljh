@@ -1,0 +1,77 @@
+---
+
+- name: Copy quota plugin
+  become: yes
+  copy:
+    src: tljh_quota_plugin
+    dest: /opt
+
+- name: Install TLJH
+  become: yes
+  shell: |
+    curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --plugin /opt/tljh_quota_plugin
+
+# - name: Install TLJH
+#   become: yes
+#   shell: |
+#     export TLJH_BOOTSTRAP_DEV=yes
+#     export TLJH_BOOTSTRAP_PIP_SPEC="git+https://github.com/jupyterhub/the-littlest-jupyterhub.git#egg=the-littlest-jupyterhub"
+#     curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 -
+
+# # This is to ensure that options in /etc/adduser.conf are used when creating new users
+# - name: Add patch to use adduser instead of useradd
+#   become: yes
+#   patch:
+#     src: user.py.patch
+#     dest: "/opt/tljh/hub/src/the-littlest-jupyterhub/tljh/user.py"
+
+- name: Set config options
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - tljh-config set auth.NativeAuthenticator.check_common_password True
+    - tljh-config set auth.NativeAuthenticator.minimum_password_length 6
+    - tljh-config set auth.type nativeauthenticator.NativeAuthenticator
+    - tljh-config set limits.memory 24G
+    - tljh-config set limits.cpu 4
+    - tljh-config reload
+
+- name: Create /usr/local/etc/jupyter
+  file:
+    path: /usr/local/etc/jupyter
+    state: directory
+  become: yes
+
+- name: Set kernel naming scheme in jupyter_config.json
+  become: yes
+  copy:
+    dest: /usr/local/etc/jupyter/jupyter_config.json
+    content: |
+      {
+        "CondaKernelSpecManager": {
+          "name_format": "conda: {environment}",
+          "env_filter": "^/opt/tljh/user$"
+        }
+      }
+
+- name: Reload config
+  become: yes
+  shell: tljh-config reload hub
+
+# - name: Create additional conda environments
+#   become: yes
+#   shell: "{{ item }}"
+#   with_items:
+#   # - "tljh-config add-item auth.NativeAuthenticator.admin_users {{ admin_user }}"
+#     - /opt/tljh/user/bin/conda install -y nb_conda_kernels
+#     - tljh-config reload hub
+#     - /opt/tljh/user/bin/conda create -y -n py37 python=3.7 numpy scipy matplotlib astropy ipykernel
+#     - /opt/tljh/user/bin/conda create -y -n py38 python=3.8 numpy scipy matplotlib astropy ipykernel
+#     - /opt/tljh/user/bin/conda create -y -n py39 python=3.9 numpy scipy matplotlib astropy ipykernel
+#     - tljh-config reload hub
+
+- name: Activate base conda env on login
+  lineinfile:
+    path: "$HOME/.profile"
+    line: "source /opt/tljh/user/bin/activate"
+    create: yes

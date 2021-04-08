@@ -1,0 +1,54 @@
+---
+
+- name: Upgrade all packages
+  become: yes
+  apt:
+    name: '*'
+    state: latest
+    update_cache: yes
+
+- name: Install dependencies
+  become: yes
+  apt:
+    name:
+      - python3
+      - python3-dev
+      - git
+      - curl
+      - snapd
+      - quota
+      - linux-image-extra-virtual
+
+- name: Activate quota modules
+  become: yes
+  lineinfile:
+    path: /etc/modules
+    line: "quota_v{{ item }}"
+  with_items:
+    - 1
+    - 2
+
+- name: Remove OS installed certbot
+  become: yes
+  apt:
+    name: certbot
+    state: absent
+
+- name: snap install core
+  become: yes
+  snap:
+    name: core
+
+- name: snap refresh core
+  become: yes
+  shell: snap refresh core
+
+- name: snap install certbot
+  become: yes
+  snap:
+    name: certbot
+    classic: yes
+
+- name: Reboot
+  become: yes
+  reboot:

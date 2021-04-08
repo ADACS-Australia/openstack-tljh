@@ -1,0 +1,51 @@
+---
+
+- name: Register UUID of root disk
+  become: yes
+  shell:
+    cmd: blkid /dev/vda1 -sUUID -ovalue
+  register: UUID
+
+- name: Check UUID is not blank
+  fail:
+    msg: Couldn't get UUID
+  when: UUID.stdout == ""
+
+- name: Edit fstab
+  become: yes
+  mount:
+    src: "UUID={{ UUID.stdout }}"
+    path: /
+    fstype: ext4
+    opts: errors=remount-ro,usrquota,grpquota
+    dump: "0"
+    passno: "1"
+    state: mounted
+  register: fstab
+
+- name: Initialise quotas
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - mount -o remount /
+    - quotaoff -v /
+    - quotacheck -ugm /
+    - quotaon -v /
+
+- name: Create default quota user
+  become: yes
+  user:
+    name: quotauser
+    create_home: no
+    system: yes
+
+- name: Set default quota
+  become: yes
+  shell: setquota -u quotauser 2G 2G 0 0 /
+
+- name: Ensure new users adopt default quota
+  become: yes
+  lineinfile:
+    path: /etc/adduser.conf
+    line: QUOTAUSER="quotauser"
+    regexp: ^QUOTAUSER=

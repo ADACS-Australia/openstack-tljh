@@ -9,7 +9,7 @@
       "communicator":      "ssh",
       "ssh_username":      "{{user `ssh_user`}}",
       "source_image_name": "NeCTAR Ubuntu 18.04 LTS (Bionic) amd64",
-      "image_name":        "TheLittlestJupyterHub_v2",
+      "image_name":        "TheLittlestJupyterHub",
       "instance_name":     "tljh_build",
       "flavor":            "m3.small",
       "security_groups":  ["default","SSH"]

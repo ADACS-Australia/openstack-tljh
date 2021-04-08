@@ -31,7 +31,7 @@ First you should make a basic ansible inventory with connection details to your 
 ```
 all:
   hosts:
-    tljh_build:
+    tljh:
       ansible_host: 136.186.111.111
       ansible_user: ubuntu
 ```

@@ -18,6 +18,9 @@
       - snapd
       - quota
       - linux-image-extra-virtual
+      - libssl-dev
+      - libcurl4-openssl-dev
+      - build-essential
 
 - name: Activate quota modules
   become: yes

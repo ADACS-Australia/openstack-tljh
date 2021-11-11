@@ -139,8 +139,9 @@ If you want to change the quota limit, you must do it manually for all existing 
   - no default user(s)
   - the Native Authenticator
   - a minimum password length of 6
-  - a 24GB memory limit, and
-  - 4 CPU limit.
+  - a 24GB memory limit,
+  - 4 CPU limit, and
+  - a timeout of 1hr for inactive notebooks, after which they are culled.
 - Each of the above options are configurable.
 - TLJH also comes installed with `nb_conda_kernels`, to allow conda environments to show up as available kernels to use. Each conda env you want to show up must have `ipykernel` installed.
 - The naming scheme for conda envs/kernels is modified in `/usr/local/etc/jupyter/jupyter_config.json` to be cleaner.

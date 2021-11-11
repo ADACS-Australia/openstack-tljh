@@ -4,13 +4,13 @@
   },
   "builders": [
     {
-      "name":              "TLJH",
+      "name":              "tljh-build",
       "type":              "openstack",
       "communicator":      "ssh",
       "ssh_username":      "{{user `ssh_user`}}",
-      "source_image_name": "NeCTAR Ubuntu 18.04 LTS (Bionic) amd64",
-      "image_name":        "TheLittlestJupyterHub",
-      "instance_name":     "tljh_build",
+      "source_image_name": "NeCTAR Ubuntu 20.04 LTS (Focal) amd64",
+      "image_name":        "ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)",
+      "instance_name":     "tljh-build",
       "flavor":            "m3.small",
       "security_groups":  ["default","SSH"]
     }
@@ -18,10 +18,10 @@
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "build.yml",
+      "playbook_file": "playbook.yml",
       "user": "{{user `ssh_user`}}",
-      "only": ["TLJH"],
-      "host_alias": "tljh"
+      "only": ["tljh-build"],
+      "host_alias": "tljh-build"
     }
   ]
 }

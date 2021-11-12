@@ -3,13 +3,13 @@
 - name: Copy quota plugin
   become: yes
   copy:
-    src: tljh_quota_plugin
+    src: tljh_custom_plugin
     dest: /opt
 
 - name: Install TLJH
   become: yes
   shell: |
-    curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --plugin /opt/tljh_quota_plugin
+    curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --plugin /opt/tljh_custom_plugin
 
 - name: Make directory /etc/systemd/system/jupyterhub.service.d
   become: yes

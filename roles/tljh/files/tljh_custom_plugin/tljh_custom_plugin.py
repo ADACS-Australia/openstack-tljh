@@ -23,3 +23,9 @@ def tljh_new_user_create(username):
         print(p.stdout)
     except:
         print(p.stderr)
+
+@hookimpl
+def tljh_custom_jupyterhub_config(c):
+    import os, nativeauthenticator
+    if c.JupyterHub.authenticator_class == "nativeauthenticator.NativeAuthenticator":
+        c.JupyterHub.template_paths = ["{}/templates/".format(os.path.dirname(nativeauthenticator.__file__))]

@@ -51,7 +51,7 @@ Note, make sure you register the username in the config ***before*** you signup.
 
 ## Authorizing a non-admin user
 All users must sign up. Before they can login however, they must be *authorized* by an admin user (unless they have been previously declared as an admin user).
-Admin users should navigate to `<jupyterhub-url>/hub/authorize` to authorize users (you cannot navigate to this via the webpage, you must manually enter the URL).
+Admin users should navigate to `<jupyterhub-url>/hub/authorize` to authorize users.
 
 
 ## Installing packages
@@ -126,6 +126,7 @@ If you want to change the quota limit, you must do it manually for all existing 
 - In order to apply disk quotas to newly created users, a custom TLJH plugin/hook is installed that calls `edquota -p <QUOTAUSER> <new-user>`. This applies the quota set on `QUOTAUSER` to the new user. `QUOTAUSER` is defined in `/etc/adduser.conf`, and is also done if users are manually created with the `adduser` command. (TLJH creates users with the lower level command `useradd`, which does not apply quotas).
 - By default, `QUOTAUSER=quotauser`, and has a 2GB hard limit (both on users and groups).
 - Some `jupyterhub.service` configuration options are overridden in `/etc/systemd/system/jupyterhub.service.d/override.conf` to allow the service to access `/dev`. This is necessary for `edquota` to work, since it resolves to mount point `/` to `/dev/vda1`.
+- The custom TLJH plugin/hook also modifies JupyterHub's `template_path` config option. It ensures that HTML elements defined by the Native Authenticator are being used (e.g. Authorize and Change Password tabs in the navigator).
 - TLJH is installed with:
   - no default user(s)
   - the Native Authenticator

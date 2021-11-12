@@ -1,6 +1,6 @@
 ---
 
-- name: Copy quota plugin
+- name: Copy plugin
   become: yes
   copy:
     src: tljh_custom_plugin
@@ -45,7 +45,6 @@
     - tljh-config set limits.memory 24G
     - tljh-config set limits.cpu 4
     - tljh-config set services.cull.timeout 3600
-    - tljh-config set services.configurator.enabled True
     - tljh-config reload
 
 - name: Create /usr/local/etc/jupyter

@@ -22,23 +22,13 @@ You should now have an image named `TheLittlestJupyterHub` available to your Ope
 Register a domain name for your server by creating a DNS record (see e.g. https://supercomputing.swin.edu.au/rcdocs/dns/).
 
 ## 4. Certify your server to enable secure connections via HTTPS
-The ansible playbook `certify.yml` automates all the necessary steps to certify your server with a LetsEncrypt certificate.
-It has two required inputs:
-1. `domain` - the domain name for your server
-2. `email` - the email address you wish to use for registering with LetsEncrypt
-
-First you should make a basic ansible inventory with connection details to your machine. e.g.
+Now that you have a domain name, SSH into your machine and run the following commands to register your server with an HTTPS certificate using an email address
 ```
-all:
-  hosts:
-    tljh:
-      ansible_host: 136.186.111.111
-      ansible_user: ubuntu
-```
-
-You can then run the playbook on your machine via
-```
-ansible-playbook -i inventory.yml certify.yml --extra-vars "domain=<DOMAIN> email=<EMAIL>"
+sudo tljh-config set https.enabled true
+sudo tljh-config add-item https.letsencrypt.domains <DOMAIN>
+sudo tljh-config set https.letsencrypt.email <EMAIL>
+sudo tljh-config reload proxy
+sudo tljh-config reload hub
 ```
 
 Your server should then be available at `https://<DOMAIN>`.
@@ -57,6 +47,7 @@ Back on the login page,
 - use the `<admin-username>` you chose above + a password, click `Create User`
 - click `Login!`, enter your username and password, and you should have immediate access without having to be authorized.
 
+Note, make sure you register the username in the config ***before*** you signup.
 
 ## Authorizing a non-admin user
 All users must sign up. Before they can login however, they must be *authorized* by an admin user (unless they have been previously declared as an admin user).

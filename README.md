@@ -13,6 +13,8 @@ packer build packer.json
 ```
 You should now have an image named `ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)` available to your OpenStack project. If you are rebuilding the image, you may need to remove the existing one before you run `packer build`.
 
+Note, this image is used by https://github.com/ADACS-Australia/murano-jupyterhub. It is a Murano package, which automates steps 2-4 and creates the first admin user.
+
 ## 2. Launch server
 - Launch a large-ish server with this image.
 - Make sure you can access it via SSH.

@@ -1,7 +1,7 @@
 ---
 
 - name: Build TLJH server
-  hosts: tljh-build
+  hosts: default
   gather_facts: yes
   become: no
 

@@ -1,6 +1,7 @@
 {
   "variables": {
-    "ssh_user":           "ubuntu"
+    "ssh_user":           "ubuntu",
+    "image_name":         "ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)"
   },
   "builders": [
     {
@@ -9,7 +10,7 @@
       "communicator":      "ssh",
       "ssh_username":      "{{user `ssh_user`}}",
       "source_image_name": "NeCTAR Ubuntu 20.04 LTS (Focal) amd64",
-      "image_name":        "ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)",
+      "image_name":        "{{user `image_name`}}",
       "instance_name":     "tljh-build",
       "flavor":            "m3.small",
       "security_groups":  ["default","SSH"]

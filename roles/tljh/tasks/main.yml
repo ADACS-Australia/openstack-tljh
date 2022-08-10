@@ -1,24 +1,24 @@
 ---
 
 - name: Copy plugin
-  become: yes
+  become: true
   copy:
     src: tljh_custom_plugin
     dest: /opt
 
 - name: Install TLJH
-  become: yes
+  become: true
   shell: |
     curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --plugin /opt/tljh_custom_plugin
 
 - name: Make directory /etc/systemd/system/jupyterhub.service.d
-  become: yes
+  become: true
   file:
     path: /etc/systemd/system/jupyterhub.service.d
     state: directory
 
 - name: Modify jupyterhub service
-  become: yes
+  become: true
   copy:
     dest: /etc/systemd/system/jupyterhub.service.d/override.conf
     content: |
@@ -29,14 +29,14 @@
       ProtectKernelModules=no
 
 - name: Reload jupyterhub service
-  become: yes
+  become: true
   shell: "{{ item }}"
   with_items:
     - systemctl daemon-reload
     - systemctl restart jupyterhub
 
 - name: Set config options
-  become: yes
+  become: true
   shell: "{{ item }}"
   with_items:
     - tljh-config set auth.NativeAuthenticator.check_common_password True
@@ -51,10 +51,10 @@
   file:
     path: /usr/local/etc/jupyter
     state: directory
-  become: yes
+  become: true
 
 - name: Set kernel naming scheme in jupyter_config.json
-  become: yes
+  become: true
   copy:
     dest: /usr/local/etc/jupyter/jupyter_config.json
     content: |
@@ -66,11 +66,11 @@
       }
 
 - name: Reload config
-  become: yes
+  become: true
   shell: tljh-config reload hub
 
 - name: Create additional conda environments
-  become: yes
+  become: true
   shell: "{{ item }}"
   with_items:
     - /opt/tljh/user/bin/conda install -y nb_conda_kernels

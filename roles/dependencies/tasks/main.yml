@@ -1,14 +1,14 @@
 ---
 
 - name: Upgrade all packages
-  become: yes
+  become: true
   apt:
     name: '*'
     state: latest
     update_cache: yes
 
 - name: Install dependencies
-  become: yes
+  become: true
   apt:
     name:
       - python3
@@ -23,7 +23,7 @@
       - build-essential
 
 - name: Activate quota modules
-  become: yes
+  become: true
   lineinfile:
     path: /etc/modules
     line: "quota_v{{ item }}"
@@ -32,26 +32,26 @@
     - 2
 
 - name: Remove OS installed certbot
-  become: yes
+  become: true
   apt:
     name: certbot
     state: absent
 
 - name: snap install core
-  become: yes
+  become: true
   snap:
     name: core
 
 - name: snap refresh core
-  become: yes
+  become: true
   shell: snap refresh core
 
 - name: snap install certbot
-  become: yes
+  become: true
   snap:
     name: certbot
     classic: yes
 
 - name: Reboot
-  become: yes
+  become: true
   reboot:

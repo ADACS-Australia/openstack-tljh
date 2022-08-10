@@ -1,7 +1,7 @@
 ---
 
 - name: Create shared directory
-  become: yes
+  become: true
   file:
     path: /srv/data/shared
     state: directory
@@ -9,7 +9,7 @@
     mode: '0775'
 
 - name: Create symlink to shared dir for all new users
-  become: yes
+  become: true
   file:
     src: /srv/data/shared
     dest: /etc/skel/shared

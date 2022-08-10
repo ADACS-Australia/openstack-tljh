@@ -1,7 +1,7 @@
 ---
 
 - name: Register UUID of root disk
-  become: yes
+  become: true
   shell:
     cmd: blkid /dev/vda1 -sUUID -ovalue
   register: UUID
@@ -12,7 +12,7 @@
   when: UUID.stdout == ""
 
 - name: Edit fstab
-  become: yes
+  become: true
   mount:
     src: "UUID={{ UUID.stdout }}"
     path: /
@@ -24,7 +24,7 @@
   register: fstab
 
 - name: Initialise quotas
-  become: yes
+  become: true
   shell: "{{ item }}"
   with_items:
     - mount -o remount /
@@ -32,18 +32,18 @@
     - quotaon -vug /
 
 - name: Create default quota user
-  become: yes
+  become: true
   user:
     name: quotauser
     create_home: no
     system: yes
 
 - name: Set default quota
-  become: yes
+  become: true
   shell: setquota -u quotauser 2G 2G 0 0 /
 
 - name: Ensure new users adopt default quota
-  become: yes
+  become: true
   lineinfile:
     path: /etc/adduser.conf
     line: QUOTAUSER="quotauser"

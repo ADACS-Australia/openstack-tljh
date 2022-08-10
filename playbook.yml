@@ -2,8 +2,8 @@
 
 - name: Build TLJH server
   hosts: default
-  gather_facts: yes
-  become: no
+  gather_facts: true
+  become: false
 
   roles:
     - dependencies

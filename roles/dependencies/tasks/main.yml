@@ -51,7 +51,3 @@
   snap:
     name: certbot
     classic: yes
-
-- name: Reboot
-  become: true
-  reboot:

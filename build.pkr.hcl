@@ -17,6 +17,7 @@ source "openstack" "tljh-build" {
   security_groups   = ["default", "SSH"]
   source_image_name = "NeCTAR Ubuntu 20.04 LTS (Focal) amd64"
   ssh_username      = "${var.ssh_user}"
+  image_visibility  = "community"
 }
 
 build {

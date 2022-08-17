@@ -11,7 +11,7 @@ packer build -var "image_name=${TMP_NAME}" build.pkr.hcl
 echo "--------- image: ${TMP_NAME} -----------"
 echo "    Setting Murano title to: ${MURANO_NAME} "
 openstack image set --property \
-  murano_image_info="{'title': '${MURANO_NAME}', 'type': 'linux.ubuntu'}" \
+  murano_image_info="{\"title\": \"${MURANO_NAME}\", \"type\": \"linux.ubuntu\"}" \
   "${TMP_NAME}"
 
 # Delete old and rename new

@@ -84,6 +84,12 @@
     line: "source /opt/tljh/user/bin/activate"
     create: yes
 
+- name: Create jupyterhub-admins group
+  become: true
+  group:
+    name: jupyterhub-admins
+    state: present
+
 - name: Add default user (ubuntu) to "jupyterhub-admins" group
   become: true
   user:

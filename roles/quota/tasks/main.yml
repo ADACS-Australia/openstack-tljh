@@ -46,3 +46,17 @@
     - quotacheck -cvugm /
     - quotaon -vug /
     - setquota -u quotauser 2G 2G 0 0 /
+
+- name: Enable auto updates/upgrades on boot via cloud-init
+  become: true
+  when: ansible_connection == "local"
+  copy:
+    dest: /usr/local/bin/start-quota
+    mode: '0755'
+    content: |
+      #!/usr/bin/env bash
+      set -e
+      mount -o remount /
+      quotacheck -cvugm /
+      quotaon -vug /
+      setquota -u quotauser 2G 2G 0 0 /

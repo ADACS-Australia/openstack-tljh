@@ -139,6 +139,6 @@ If you want to change the quota limit, you must do it manually for all existing 
 - Each of the above options are configurable.
 - TLJH also comes installed with `nb_conda_kernels`, to allow conda environments to show up as available kernels to use. Each conda env you want to show up must have `ipykernel` installed.
 - The naming scheme for conda envs/kernels is modified in `/usr/local/etc/jupyter/jupyter_config.json` to be cleaner.
-- Three additional conda envs are installed (py37, py38, py39), each with numpy, scipy, matplotlib, astropy, and ipykernel.
+- An additional conda env is installed (py3, latest python 3) with numpy, scipy, matplotlib, astropy, and ipykernel.
 - The base conda environment is activated on login (via SSH) for convenience.
 - A `shared` directory is added to every users' home directory. It is readable by everyone, and writable by users in the `jupyterhub-admins` group.

@@ -69,15 +69,13 @@
   become: true
   shell: tljh-config reload hub
 
-- name: Create additional conda environments
+- name: Create additional conda environment with latest python
   become: true
   shell: "{{ item }}"
   with_items:
     - /opt/tljh/user/bin/conda install -y nb_conda_kernels
     - tljh-config reload hub
-    - /opt/tljh/user/bin/conda create -y -n py37 python=3.7 numpy scipy matplotlib astropy ipykernel
-    - /opt/tljh/user/bin/conda create -y -n py38 python=3.8 numpy scipy matplotlib astropy ipykernel
-    - /opt/tljh/user/bin/conda create -y -n py39 python=3.9 numpy scipy matplotlib astropy ipykernel
+    - /opt/tljh/user/bin/conda create -y -n py3 python=3 numpy scipy matplotlib astropy ipykernel
     - tljh-config reload hub
 
 - name: Activate base conda env on login

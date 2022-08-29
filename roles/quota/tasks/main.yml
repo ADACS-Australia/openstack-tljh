@@ -25,6 +25,7 @@
 
 - name: Initialise quotas
   become: true
+  when: ansible_connection != "local"
   shell: "{{ item }}"
   with_items:
     - mount -o remount /

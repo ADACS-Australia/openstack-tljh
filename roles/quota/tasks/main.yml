@@ -77,7 +77,7 @@
     dest: /etc/profile.d/start-quota.sh
     mode: '0644'
     content: |
-      if [ "$(quotaon -p / | grep 'user quota' | grep 'is on')" == "" ]; then
+      if [ "$(quotaon -p / | grep 'user quota' | grep 'is on')" == "" && "$(groups | grep jupyterhub-admins)" != "" ]; then
         cat <<-EOF
         Disk quotas are currently off. To turn them on use "sudo start-quota".
         Note: you may need to reboot the system first to enable the quota kernel modules (use "sudo reboot").

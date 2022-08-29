@@ -83,3 +83,10 @@
     path: "$HOME/.profile"
     line: "source /opt/tljh/user/bin/activate"
     create: yes
+
+- name: Add default user (ubuntu) to "jupyterhub-admins" group
+  become: true
+  user:
+    name: '{{ ansible_user }}'
+    groups: jupyterhub-admins
+    append: yes

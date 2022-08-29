@@ -54,9 +54,13 @@
     dest: /usr/local/bin/start-quota
     mode: '0755'
     content: |
-      #!/usr/bin/env bash
-      set -e
+      #!/bin/bash -e
+      if [ "$EUID" -ne 0 ]; then
+        echo "ERROR: please run as root"
+        exit 1
+      fi
       mount -o remount /
+      quotaoff /
       quotacheck -cvugm /
       quotaon -vug /
       setquota -u quotauser 2G 2G 0 0 /

@@ -63,4 +63,9 @@
       quotaoff /
       quotacheck -cvugm /
       quotaon -vug /
+      errcode=$?
+      if [ "$errcode" != 0 ]; then
+        echo "You may need to reboot the system to load the quota kernel modules"
+        exit 1
+      fi
       setquota -u quotauser 2G 2G 0 0 /

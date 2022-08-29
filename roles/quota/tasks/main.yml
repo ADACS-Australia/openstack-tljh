@@ -69,3 +69,18 @@
         exit 1
       fi
       setquota -u quotauser 2G 2G 0 0 /
+
+- name: Tell user how to activate quota on login, if not active
+  become: true
+  when: ansible_connection == "local"
+  copy:
+    dest: /etc/profile.d/start-quota.sh
+    mode: '0644'
+    content: |
+      if [ "$(quotaon -p / | grep 'user quota' | grep 'is on')" == "" ]; then
+        cat <<-EOF
+        Disk quotas are currently off. To turn them on use "sudo start-quota".
+        Note: you may need to reboot the system first to enable the quota kernel modules (use "sudo reboot").
+
+      EOF
+      fi

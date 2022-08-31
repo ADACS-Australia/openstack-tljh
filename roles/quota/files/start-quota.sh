@@ -39,4 +39,4 @@ if [ "$errcode" != 0 ]; then
   echo 'ERROR: You may need to reboot the system to load the quota kernel modules ("sudo reboot")'
 fi
 
-exit $exit_code
+exit $errcode

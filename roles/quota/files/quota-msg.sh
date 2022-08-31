@@ -1,7 +1,7 @@
 if [ "$(groups | grep jupyterhub-admins)" != "" ]; then
   list=
 
-  for device in $(ls /dev/vd[a-z]1)
+  for device in $(ls /dev/vd[a-z]1); do
     if [ "$(quotaon -p $device | grep 'user quota' | grep 'is on')" == "" ]; then
       list+="${device} "
     fi

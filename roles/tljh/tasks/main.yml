@@ -76,8 +76,8 @@
   with_items:
     - /opt/tljh/user/bin/conda install -y nb_conda_kernels
     - tljh-config reload hub
-    - /opt/tljh/user/bin/conda create -y -n py3 python=3 numpy scipy matplotlib astropy ipykernel
-    - tljh-config reload hub
+    # - /opt/tljh/user/bin/conda create -y -n py3 python=3 numpy scipy matplotlib astropy ipykernel
+    # - tljh-config reload hub
 
 - name: Create jupyterhub-admins group
   become: true

@@ -100,20 +100,24 @@ Remember to reload the configuration for changes to take effect.
 ## Quotas
 To report the quota for all users
 ```
-sudo repquota -sa
+sudo repquota -avs
 ```
 
 To set the quota for a particular user (e.g. `quotauser`)
 ```
-sudo setquota -u quotauser 2G 2G 0 0 /
+sudo setquota -a -u quotauser 2G 2G 0 0
 ```
 
-To apply the quota set on `quotauser` to `another-user`
+To apply the quota set on `user-1` to `user-2`
 ```
-sudo edquota -p quotauser another-user
+sudo edquota -p user-1 user-2
 ```
 
-If you want to change the quota limit, you must do it manually for all existing users using one of the methods above. For new users, changing the quota for `quotauser` should be sufficient.
+If you want to change the quota limit, you must do it manually for all existing users using one of the methods above. For new users,
+```
+sudo tljh-config set quota <new-limit>
+sudo tljh-config reload
+```
 
 
 ## References
@@ -125,9 +129,9 @@ If you want to change the quota limit, you must do it manually for all existing 
 
 - The latest `certbot` is installed via `snap`.
 - User and group quotas (journaled) are enabled.
-- In order to apply disk quotas to newly created users, a custom TLJH plugin/hook is installed that calls `edquota -p <QUOTAUSER> <new-user>`. This applies the quota set on `QUOTAUSER` to the new user. `QUOTAUSER` is defined in `/etc/adduser.conf`, and is also done if users are manually created with the `adduser` command. (TLJH creates users with the lower level command `useradd`, which does not apply quotas).
-- By default, `QUOTAUSER=quotauser`, and has a 2GB hard limit (both on users and groups).
-- Some `jupyterhub.service` configuration options are overridden in `/etc/systemd/system/jupyterhub.service.d/override.conf` to allow the service to access `/dev`. This is necessary for `edquota` to work, since it resolves to mount point `/` to `/dev/vda1`.
+- In order to apply disk quotas to newly created users, a custom TLJH plugin/hook is installed that calls `setquota -a -u <user> <quota> <quota> 0 0`. Quota is read from the `tljh-config`.
+- The default disk quota is a 2G hard limit (both on users and groups).
+- Some `jupyterhub.service` configuration options are overridden in `/etc/systemd/system/jupyterhub.service.d/override.conf` to allow the service to access `/dev`. This is necessary for `setquota` to work, since it resolves to mount point `/` to `/dev/vda1`.
 - The custom TLJH plugin/hook also modifies JupyterHub's `template_path` config option. It ensures that HTML elements defined by the Native Authenticator are being used (e.g. Authorize and Change Password tabs in the navigator).
 - TLJH is installed with:
   - no default user(s)
@@ -140,5 +144,4 @@ If you want to change the quota limit, you must do it manually for all existing 
 - TLJH also comes installed with `nb_conda_kernels`, to allow conda environments to show up as available kernels to use. Each conda env you want to show up must have `ipykernel` installed.
 - The naming scheme for conda envs/kernels is modified in `/usr/local/etc/jupyter/jupyter_config.json` to be cleaner.
 - An additional conda env is installed (py3, latest python 3) with numpy, scipy, matplotlib, astropy, and ipykernel.
-- The base conda environment is activated on login (via SSH) for convenience.
 - A `shared` directory is added to every users' home directory. It is readable by everyone, and writable by users in the `jupyterhub-admins` group.

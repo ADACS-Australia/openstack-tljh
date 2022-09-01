@@ -45,6 +45,7 @@
     - tljh-config set limits.memory 24G
     - tljh-config set limits.cpu 4
     - tljh-config set services.cull.timeout 3600
+    - tljh-config set quota 2G
     - tljh-config reload
 
 - name: Create /usr/local/etc/jupyter
@@ -77,12 +78,6 @@
     - tljh-config reload hub
     - /opt/tljh/user/bin/conda create -y -n py3 python=3 numpy scipy matplotlib astropy ipykernel
     - tljh-config reload hub
-
-- name: Activate base conda env on login
-  lineinfile:
-    path: "$HOME/.profile"
-    line: "source /opt/tljh/user/bin/activate"
-    create: yes
 
 - name: Create jupyterhub-admins group
   become: true

@@ -23,20 +23,6 @@
     state: mounted
   register: fstab
 
-- name: Create default quota user
-  become: true
-  user:
-    name: quotauser
-    create_home: no
-    system: yes
-
-- name: Ensure new users adopt default quota
-  become: true
-  lineinfile:
-    path: /etc/adduser.conf
-    line: QUOTAUSER="quotauser"
-    regexp: ^QUOTAUSER=
-
 - name: Initialise quotas
   become: true
   when: ansible_connection != "local"
@@ -45,7 +31,6 @@
     - mount -o remount /
     - quotacheck -cvugm /
     - quotaon -vug /
-    - setquota -u quotauser 2G 2G 0 0 /
 
 - name: Add start-quota script to /usr/local/bin/
   become: true

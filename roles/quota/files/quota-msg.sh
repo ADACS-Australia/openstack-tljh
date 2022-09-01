@@ -1,24 +1,11 @@
-if [ "$(groups | grep jupyterhub-admins)" != "" ]; then
-  list=
-
-  for device in $(ls /dev/vd[a-z]1); do
-    if [ "$(quotaon -p $device | grep 'user quota' | grep 'is on')" == "" ]; then
-      list+="${device} "
-    fi
-  done
-
-  if [ ! -z "$list" ]; then
+if groups | grep -q jupyterhub-admins && quotaon -p -a | grep -q "is off"; then
 cat << EOF
-Disk quotas are currently off for the following devices: $list
+Warning:
 
-To turn them on use "sudo start-quota".
+$(quotaon -p -a | grep "is off")
 
-Note: you may need to reboot the system first to enable the quota
-kernel modules (use "sudo reboot").
+You may need to reboot the system to enable the quota kernel modules.
+("sudo reboot")
 
 EOF
-  fi
-
-  unset list
-
 fi

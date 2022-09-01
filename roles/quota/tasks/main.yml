@@ -23,18 +23,8 @@
     state: mounted
   register: fstab
 
-- name: Initialise quotas
-  become: true
-  when: ansible_connection != "local"
-  shell: "{{ item }}"
-  with_items:
-    - mount -o remount /
-    - quotacheck -cvugm /
-    - quotaon -vug /
-
 - name: Add start-quota script to /usr/local/bin/
   become: true
-  when: ansible_connection == "local"
   copy:
     src: start-quota.sh
     dest: /usr/local/bin/start-quota
@@ -42,7 +32,6 @@
 
 - name: Tell user how to activate quota on login, if not active
   become: true
-  when: ansible_connection == "local"
   copy:
     src: quota-msg.sh
     dest: /etc/profile.d/quota-msg.sh

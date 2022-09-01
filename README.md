@@ -131,7 +131,7 @@ sudo tljh-config reload
 - User and group quotas (journaled) are enabled.
 - In order to apply disk quotas to newly created users, a custom TLJH plugin/hook is installed that calls `setquota -a -u <user> <quota> <quota> 0 0`. Quota is read from the `tljh-config`.
 - The default disk quota is a 2G hard limit (both on users and groups).
-- Some `jupyterhub.service` configuration options are overridden in `/etc/systemd/system/jupyterhub.service.d/override.conf` to allow the service to access `/dev`. This is necessary for `setquota` to work, since it resolves to mount point `/` to `/dev/vda1`.
+- Some `jupyterhub.service` configuration options are overridden in `/etc/systemd/system/jupyterhub.service.d/override.conf` to allow the service to access `/dev`. This is necessary for `setquota` to work, since it resolves to mount point `/` to `/dev/vda1`. It also sets an ExecStartPost to run a script after jupyterhub is up, to try and enable disk quotas automatically.
 - The custom TLJH plugin/hook also modifies JupyterHub's `template_path` config option. It ensures that HTML elements defined by the Native Authenticator are being used (e.g. Authorize and Change Password tabs in the navigator).
 - TLJH is installed with:
   - no default user(s)

@@ -1,20 +1,14 @@
-#!/usr/bin/env bash
+#!/bin/bash -eu
+DEFAULT_IMAGE_NAME="ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)"
 
-set -eu
-
-IMAGE_NAME="ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)"
+# If provided, first positional argument will be used as the image name
+IMAGE_NAME=${1:-$DEFAULT_IMAGE_NAME}
 TMP_NAME="${IMAGE_NAME} [tmp]"
-MURANO_NAME="ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)" # Don't change this
 
+echo "---> Building image: $IMAGE_NAME"
 packer build -var "image_name=${TMP_NAME}" build.pkr.hcl
 
-echo "--------- image: ${TMP_NAME} -----------"
-echo "    Setting Murano title to: ${MURANO_NAME} "
-openstack image set --property \
-  murano_image_info="{\"title\": \"${MURANO_NAME}\", \"type\": \"linux.ubuntu\"}" \
-  "${TMP_NAME}"
-
-# Delete old and rename new
+echo "---> Deleting old image and renaming the new one"
 set -x
 openstack image delete "$IMAGE_NAME" || true
 openstack image set --name "$IMAGE_NAME" "$TMP_NAME"

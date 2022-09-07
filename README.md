@@ -113,12 +113,19 @@ To apply the quota set on `user-1` to `user-2`
 sudo edquota -p user-1 user-2
 ```
 
-If you want to change the quota limit, you must do it manually for all existing users using one of the methods above. For new users,
+If you want to change the quota limit,
 ```
 sudo tljh-config set quota <new-limit>
 sudo tljh-config reload
 ```
 
+This will immediately be used for any new users, however you will need to reboot the server for the new quota to be applied to any existing users
+
+```
+sudo reboot
+```
+
+Wait ~30 seconds, then refresh your page.
 
 ## References
 - https://tljh.jupyter.org/en/latest/

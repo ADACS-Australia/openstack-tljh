@@ -134,7 +134,6 @@ Wait ~30 seconds, then refresh your page.
 
 # Generic notes on setup/configuration/defaults
 
-- The latest `certbot` is installed via `snap`.
 - User and group quotas (journaled) are enabled.
 - In order to apply disk quotas to newly created users, a custom TLJH plugin/hook is installed that calls `setquota -a -u <user> <quota> <quota> 0 0`. Quota is read from the `tljh-config`.
 - The default disk quota is a 2G hard limit (both on users and groups).
@@ -147,8 +146,10 @@ Wait ~30 seconds, then refresh your page.
   - a 24GB memory limit,
   - 4 CPU limit, and
   - a timeout of 1hr for inactive notebooks, after which they are culled.
+  - 2G disk quota per user
 - Each of the above options are configurable.
 - TLJH also comes installed with `nb_conda_kernels`, to allow conda environments to show up as available kernels to use. Each conda env you want to show up must have `ipykernel` installed.
 - The naming scheme for conda envs/kernels is modified in `/usr/local/etc/jupyter/jupyter_config.json` to be cleaner.
 - An additional conda env is installed (py3, latest python 3) with numpy, scipy, matplotlib, astropy, and ipykernel.
 - A `shared` directory is added to every users' home directory. It is readable by everyone, and writable by users in the `jupyterhub-admins` group.
+- Useful iPython style forward/reverse search history bindings are set for each user via .inputrc

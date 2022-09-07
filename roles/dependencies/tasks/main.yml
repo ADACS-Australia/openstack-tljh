@@ -43,28 +43,7 @@
     - 1
     - 2
 
-- name: Remove OS installed certbot
-  become: true
-  apt:
-    name: certbot
-    state: absent
-
-- name: snap install core
-  become: true
-  snap:
-    name: core
-
-- name: snap refresh core
-  become: true
-  shell: snap refresh core
-
-- name: snap install certbot
-  become: true
-  snap:
-    name: certbot
-    classic: yes
-
-- name: Reboot
+- name: Reboot to ensure the quota kernel modules are loaded
   become: true
   when: ansible_connection != "local"
   reboot:

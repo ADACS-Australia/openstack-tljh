@@ -92,3 +92,19 @@
     name: '{{ ansible_user }}'
     groups: jupyterhub-admins
     append: yes
+
+- name: Get nativeauthenticator TEMPLATE_DIR
+  become: true
+  shell: /opt/tljh/hub/bin/python -c 'from nativeauthenticator.handlers import TEMPLATE_DIR; print(TEMPLATE_DIR)'
+  register: TEMPLATE_DIR
+
+- name: Try to patch nativeauthenticator signup page
+  become: true
+  patch:
+    src: "nativeauthenticator-signup.patch"
+    dest: "{{ TEMPLATE_DIR.stdout }}/signup.html"
+  ignore_errors: true
+
+- name: Reload config
+  become: true
+  shell: tljh-config reload

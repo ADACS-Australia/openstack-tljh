@@ -117,15 +117,10 @@ If you want to change the quota limit,
 ```
 sudo tljh-config set quota <new-limit>
 sudo tljh-config reload
+sudo start-quota
 ```
 
-This will immediately be used for any new users, however you will need to reboot the server for the new quota to be applied to any existing users
-
-```
-sudo reboot
-```
-
-Wait ~30 seconds, then refresh your page.
+The new quota will immediately be used for new users, and the `start-quota` script ensures that it is also applied to all existing jupyter users.
 
 ## References
 - https://tljh.jupyter.org/en/latest/

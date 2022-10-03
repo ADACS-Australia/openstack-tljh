@@ -27,7 +27,7 @@
       PrivateDevices=no
       ProtectKernelTunables=no
       ProtectKernelModules=no
-      ExecStartPost=/usr/local/bin/start-quota || true
+      ExecStartPost=/usr/local/bin/.start-quota-wrapper
 
 - name: Reload jupyterhub service
   become: true

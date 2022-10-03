@@ -30,6 +30,18 @@
     dest: /usr/local/bin/start-quota
     mode: '0755'
 
+- name: Add .start-quota-wrapper script to /usr/local/bin/
+  become: true
+  copy:
+    content: |
+      #!/bin/bash -u
+      nreboots=$(last | grep reboot | wc -l)
+      if (( nreboots > 1 )); then
+        start-quota
+      fi
+    dest: /usr/local/bin/.start-quota-wrapper
+    mode: '0755'
+
 - name: Tell user how to activate quota on login, if not active
   become: true
   copy:

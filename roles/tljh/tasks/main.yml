@@ -27,14 +27,14 @@
       PrivateDevices=no
       ProtectKernelTunables=no
       ProtectKernelModules=no
-      ExecStartPost=/usr/local/bin/start-quota
+      ExecStartPost=/usr/local/bin/start-quota || true
 
 - name: Reload jupyterhub service
   become: true
-  shell: "{{ item }}"
-  with_items:
-    - systemctl daemon-reload
-    - systemctl restart jupyterhub
+  systemd:
+    state: restarted
+    name: jupyterhub
+    daemon_reload: true
 
 - name: Set config options
   become: true

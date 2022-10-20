@@ -47,6 +47,7 @@
     - tljh-config set limits.cpu 4
     - tljh-config set services.cull.timeout 3600
     - tljh-config set quota 2G
+    - tljh-config set user_environment.default_app jupyterlab
     - tljh-config reload
 
 - name: Create /usr/local/etc/jupyter

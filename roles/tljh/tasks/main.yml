@@ -43,6 +43,8 @@
     - tljh-config set auth.NativeAuthenticator.check_common_password True
     - tljh-config set auth.NativeAuthenticator.minimum_password_length 6
     - tljh-config set auth.type nativeauthenticator.NativeAuthenticator
+    - tljh-config set auth.NativeAuthenticator.ask_email_on_signup True
+    - tljh-config set auth.NativeAuthenticator.allowed_failed_logins 5
     - tljh-config set limits.memory 24G
     - tljh-config set limits.cpu 4
     - tljh-config set services.cull.timeout 3600

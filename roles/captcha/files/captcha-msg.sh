@@ -1,4 +1,4 @@
-if groups | grep -q jupyterhub-admins && ! tljh-config show | grep -q "recaptcha" ; then
+if groups | grep -q jupyterhub-admins && ! sudo tljh-config show | grep -q "recaptcha" ; then
 
 cat << EOF
 

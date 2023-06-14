@@ -74,16 +74,25 @@
   become: true
   shell: tljh-config reload hub
 
+- shell: /opt/tljh/user/bin/mamba clean -y --all
+  become: true
+
 - name: Install additional packages
   become: true
-  shell: "{{ item }}"
+  shell: "/opt/tljh/user/bin/mamba install -y -n base -c conda-forge {{ item }}"
   with_items:
-    - /opt/tljh/user/bin/conda clean   -y --all
-    - /opt/tljh/user/bin/conda update  -y -n base -c conda-forge conda
-    - /opt/tljh/user/bin/conda install -y -n base -c conda-forge nb_conda_kernels
-    - /opt/tljh/user/bin/conda install -y -n base -c conda-forge numpy scipy matplotlib astropy ipykernel
-    - /opt/tljh/user/bin/conda clean   -y --all
-    - tljh-config reload hub
+    - nb_conda_kernels
+    - numpy
+    - scipy
+    - matplotlib
+    - astropy
+    - ipykernel
+
+- shell: /opt/tljh/user/bin/mamba clean -y --all
+  become: true
+
+- shell: tljh-config reload hub
+  become: true
 
 - name: Create jupyterhub-admins group
   become: true

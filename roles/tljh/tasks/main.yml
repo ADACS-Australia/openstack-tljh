@@ -74,13 +74,15 @@
   become: true
   shell: tljh-config reload hub
 
-- name: Create additional conda environment with latest python
+- name: Install additional packages
   become: true
   shell: "{{ item }}"
   with_items:
-    - /opt/tljh/user/bin/conda install -y nb_conda_kernels
-    - tljh-config reload hub
-    - /opt/tljh/user/bin/conda create -y -n py3 python=3 numpy scipy matplotlib astropy ipykernel
+    - /opt/tljh/user/bin/conda clean   -y --all
+    - /opt/tljh/user/bin/conda update  -y -n base -c conda-forge conda
+    - /opt/tljh/user/bin/conda install -y -n base -c conda-forge nb_conda_kernels
+    - /opt/tljh/user/bin/conda install -y -n base -c conda-forge numpy scipy matplotlib astropy ipykernel
+    - /opt/tljh/user/bin/conda clean   -y --all
     - tljh-config reload hub
 
 - name: Create jupyterhub-admins group

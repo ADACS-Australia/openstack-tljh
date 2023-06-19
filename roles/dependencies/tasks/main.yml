@@ -7,27 +7,10 @@
     state: absent
     update_cache: yes
 
-- name: Upgrade all packages
-  become: true
-  apt:
-    name: '*'
-    state: latest
-    update_cache: yes
-  register: apt_action
-  retries: 100
-  delay: 10
-  until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
-  # Note: https://saveriomiroddi.github.io/Handling-the-apt-lock-on-ubuntu-server-installations/
-
 - name: Install dependencies
   become: true
   apt:
     name:
-      - python3
-      - python3-dev
-      - git
-      - curl
-      - snapd
       - quota
       - linux-image-extra-virtual
       - libssl-dev

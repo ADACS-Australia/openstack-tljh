@@ -2,7 +2,6 @@ from tljh.hooks import hookimpl
 from tljh.config import CONFIG_FILE
 from tljh.yaml import yaml
 import subprocess
-import configparser
 
 @hookimpl
 def tljh_new_user_create(username):

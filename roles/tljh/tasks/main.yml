@@ -50,7 +50,14 @@
     - tljh-config set services.cull.timeout 3600
     - tljh-config set quota 2G
     - tljh-config set user_environment.default_app jupyterlab
-    - tljh-config reload
+
+- name: Increase spawner timeout
+  become: true
+  copy:
+    dest: /opt/tljh/config/jupyterhub_config.d/spawner.py
+    content: |
+      c.Spawner.http_timeout = 60
+      c.Spawner.start_timeout = 60
 
 - name: Create /usr/local/etc/jupyter
   file:
@@ -72,14 +79,14 @@
 
 - name: Reload config
   become: true
-  shell: tljh-config reload hub
+  shell: tljh-config reload
 
-- shell: /opt/tljh/user/bin/mamba clean -y --all
+- shell: /opt/tljh/user/bin/mamba clean -q -y --all
   become: true
 
 - name: Install additional packages
   become: true
-  shell: "/opt/tljh/user/bin/mamba install -y -n base -c conda-forge {{ item }}"
+  shell: "/opt/tljh/user/bin/mamba install -q -y -n base -c conda-forge {{ item }}"
   with_items:
     - nb_conda_kernels
     - numpy
@@ -88,10 +95,7 @@
     - astropy
     - ipykernel
 
-- shell: /opt/tljh/user/bin/mamba clean -y --all
-  become: true
-
-- shell: tljh-config reload hub
+- shell: /opt/tljh/user/bin/mamba clean -q -y --all
   become: true
 
 - name: Create jupyterhub-admins group
@@ -118,7 +122,3 @@
     src: "nativeauthenticator-signup.patch"
     dest: "{{ TEMPLATE_DIR.stdout }}/signup.html"
   ignore_errors: true
-
-- name: Reload config
-  become: true
-  shell: tljh-config reload

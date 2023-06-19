@@ -35,8 +35,7 @@
   copy:
     content: |
       #!/bin/bash -u
-      nreboots=$(last | grep reboot | wc -l)
-      if (( nreboots > 1 )); then
+      if grep quota /proc/modules | grep -iwq live; then
         start-quota
       fi
     dest: /usr/local/bin/.start-quota-wrapper

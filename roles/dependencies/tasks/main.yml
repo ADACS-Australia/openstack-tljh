@@ -1,12 +1,5 @@
 ---
 
-- name: Remove unattended-upgrades
-  become: true
-  apt:
-    name: unattended-upgrades
-    state: absent
-    update_cache: yes
-
 - name: Install dependencies
   become: true
   apt:
@@ -30,12 +23,3 @@
   become: true
   when: ansible_connection != "local"
   reboot:
-
-- name: Enable auto updates/upgrades on boot via cloud-init
-  become: true
-  copy:
-    dest: /etc/cloud/cloud.cfg.d/apt-upgrades.cfg
-    content: |
-      #cloud-config
-      package_update: true
-      package_upgrade: true

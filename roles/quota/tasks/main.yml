@@ -3,7 +3,7 @@
 - name: Register UUID of root disk
   become: true
   shell:
-    cmd: blkid /dev/vda1 -sUUID -ovalue
+    cmd: blkid $(df --output=source / | tail -1) -sUUID -ovalue
   register: UUID
 
 - name: Check UUID is not blank

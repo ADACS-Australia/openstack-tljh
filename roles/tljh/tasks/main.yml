@@ -9,7 +9,7 @@
 - name: Install TLJH
   become: true
   shell: |
-    curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --show-progress-page --plugin /opt/tljh_custom_plugin
+    curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --version 0.2.0 --show-progress-page --plugin /opt/tljh_custom_plugin
 
 - name: Make directory /etc/systemd/system/jupyterhub.service.d
   become: true

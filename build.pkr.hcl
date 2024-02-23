@@ -38,6 +38,7 @@ build {
   provisioner "ansible" {
     playbook_file = "ansible-jupyterhub/playbook.yml"
     user          = "${var.ssh_user}"
+    extra_arguments = [ "--scp-extra-args", "'-O'" ]
   }
 
 }

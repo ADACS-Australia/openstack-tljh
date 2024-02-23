@@ -35,6 +35,11 @@ source "openstack" "tljh-build" {
 build {
   sources = ["source.openstack.tljh-build"]
 
+  provisioner "shell" {
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    script = "scripts/nectar-ubuntu-update.sh"
+  }
+
   provisioner "ansible" {
     playbook_file = "ansible-jupyterhub/playbook.yml"
     user          = "${var.ssh_user}"

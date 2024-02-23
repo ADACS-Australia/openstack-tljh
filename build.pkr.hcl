@@ -36,7 +36,7 @@ build {
   sources = ["source.openstack.tljh-build"]
 
   provisioner "ansible" {
-    playbook_file = "ansible-playbook/playbook.yml"
+    playbook_file = "ansible-jupyterhub/playbook.yml"
     user          = "${var.ssh_user}"
   }
 

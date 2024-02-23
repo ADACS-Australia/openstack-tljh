@@ -1,0 +1,3 @@
+[submodule "ansible-jupyterhub"]
+	path = ansible-jupyterhub
+	url = git@github.com:ADACS-Australia/ansible-jupyterhub.git

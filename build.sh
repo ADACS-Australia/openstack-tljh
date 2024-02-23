@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-DEFAULT_IMAGE_NAME="ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)"
+DEFAULT_IMAGE_NAME="ADACS The Littlest JupyterHub (Ubuntu 22.04 LTS Jammy)"
 
 # If provided, first positional argument will be used as the image name
 IMAGE_NAME=${1:-$DEFAULT_IMAGE_NAME}

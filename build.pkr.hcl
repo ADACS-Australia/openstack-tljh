@@ -1,7 +1,7 @@
 
 variable "image_name" {
   type    = string
-  default = "ADACS The Littlest JupyterHub (Ubuntu 20.04 LTS Focal)"
+  default = "ADACS The Littlest JupyterHub (Ubuntu 22.04 LTS Jammy)"
 }
 
 variable "ssh_user" {
@@ -15,7 +15,7 @@ source "openstack" "tljh-build" {
   image_name        = "${var.image_name}"
   instance_name     = "tljh-build"
   security_groups   = ["default", "SSH"]
-  source_image_name = "NeCTAR Ubuntu 20.04 LTS (Focal) amd64"
+  source_image_name = "NeCTAR Ubuntu 22.04 LTS (Jammy) amd64"
   ssh_username      = "${var.ssh_user}"
   image_visibility  = "community"
 }
@@ -24,7 +24,7 @@ build {
   sources = ["source.openstack.tljh-build"]
 
   provisioner "ansible" {
-    playbook_file = "./playbook.yml"
+    playbook_file = "ansible-playbook/playbook.yml"
     user          = "${var.ssh_user}"
   }
 
